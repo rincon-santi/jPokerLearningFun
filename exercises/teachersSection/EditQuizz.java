@@ -18,6 +18,7 @@ package exercises.teachersSection;
 
 import exercises.utils.Message;
 import exercises.utils.GeneralQuestion;
+import exercises.utils.ImageManager;
 import exercises.utils.OtherQuestion;
 import exercises.utils.Question;
 import exercises.utils.Quizz;
@@ -27,6 +28,9 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.Vector;
 import java.util.regex.Pattern;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -119,6 +123,25 @@ public class EditQuizz extends javax.swing.JFrame {
     public void addQuestion(GeneralQuestion q){
         if(_questions.contains(q)) new Message("QUESTION ALREADY INCLUDED");
         else{
+            Vector<String> aux=new Vector<String>();
+            for (GeneralQuestion qu : _questions) aux.add(qu.getName());
+            if (aux.contains(q.getName())) {
+                String [] opts ={
+                    "Rename",
+                    "Overwrite"
+                };
+                Icon icon= new ImageIcon(ImageManager.INSTANCE.getImage(ImageManager.IMAGES_PATH+"poker-chip.png")); 
+                String selectOpt= (String) JOptionPane.showInputDialog(null, "Name already in use", "WARNING", JOptionPane.DEFAULT_OPTION, icon, opts, opts[0]);
+                switch (selectOpt){
+                    case "Rename":
+                        q.setName((String) JOptionPane.showInputDialog(null, "Introduce New Name", "Rename", JOptionPane.DEFAULT_OPTION));
+                        break;
+                    case "Overwrite":
+                        for (GeneralQuestion que : _questions) if (que.getName().equals(q.getName())) _questions.remove(que);
+                        aux.remove(q.getName());
+                        break;
+                }
+            }
             if (q.getKind()==2){
                 String [] auxSt;
                 if (((OtherQuestion)q).getImgRoute().split("/")[0].equals("resources")) auxSt=((OtherQuestion)q).getImgRoute().split("/");
@@ -131,7 +154,6 @@ public class EditQuizz extends javax.swing.JFrame {
                 _father.moveImage(((OtherQuestion)q).getImgRoute(),"resources/images/questionImages/"+_name+auxSt[auxSt.length-1]);
                 ((OtherQuestion)q).setImgRoute("resources/images/questionImages/"+_name+auxSt[auxSt.length-1]);
             }
-            Vector<String> aux=new Vector<String>();
             _questions.add(q);
             for (GeneralQuestion qu : _questions){
                 aux.add(qu.getName());

@@ -44,6 +44,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import exercises.utils.ImageManager;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -142,8 +145,23 @@ public class TeacherGUI extends javax.swing.JFrame {
     public void addQuestion(GeneralQuestion q){
         Vector<String> aux=new Vector<String>();
         for (GeneralQuestion qu : _questions) aux.add(qu.getName());
-        if (aux.contains(q.getName())) new Message("NAME ALREADY IN USE, TRY AGAIN").setVisible(true);
-        else {
+        if (aux.contains(q.getName())) {
+            String [] opts ={
+                "Rename",
+                "Overwrite"
+            };
+            Icon icon= new ImageIcon(ImageManager.INSTANCE.getImage(ImageManager.IMAGES_PATH+"poker-chip.png")); 
+            String selectOpt= (String) JOptionPane.showInputDialog(null, "Name already in use", "WARNING", JOptionPane.DEFAULT_OPTION, icon, opts, opts[0]);
+            switch (selectOpt){
+                case "Rename":
+                    q.setName((String) JOptionPane.showInputDialog(null, "Introduce New Name", "Rename", JOptionPane.DEFAULT_OPTION));
+                    break;
+                case "Overwrite":
+                    for (GeneralQuestion que : _questions) if (que.getName().equals(q.getName())) _questions.remove(que);
+                    aux.remove(q.getName());
+                    break;
+            }
+        }
             if (q.getKind()==2){
                 String [] auxSt;
                 if (((OtherQuestion)q).getImgRoute().split("/")[0].equals("resources")) auxSt=((OtherQuestion)q).getImgRoute().split("/");
@@ -159,7 +177,6 @@ public class TeacherGUI extends javax.swing.JFrame {
             _questions.add(q);
             actualizeListQuestions(_questions);
             setVisible(true);
-        }
         try {
             TeacherSaver.save(_name, _key, _questions, _quizzes);
         } catch (Exception ex) {
