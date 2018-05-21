@@ -61,15 +61,7 @@ public class StudentLoader {
             auxTests.put(auxTestName,auxTestQuestions);
         }
         if (!(teachers==null)) for (String teacher : teachers){
-            SSHConnector.getFile("resources/data/teachers",teacher+".data");
-            File file =new File("resources/data/teachers/"+teacher+".data");
-            int longness=(int)file.length();
-            FileInputStream reader = new java.io.FileInputStream("resources/data/teachers/"+teacher+".data");
-            byte [] ciphered=new byte[longness];
-            String t_key;
-            longness=reader.read(ciphered);
-            t_key=cipherUtils.descifra(ciphered).split("%EOKEY&")[0];
-            Pair<LinkedList<GeneralQuestion>, LinkedList<Quizz>> auPair = TeacherLoader.load(teacher, t_key);
+            Pair<LinkedList<GeneralQuestion>, LinkedList<Quizz>> auPair = TeacherLoader.getTeacherInfo(teacher);
             for (GeneralQuestion question : auPair.getFirst()){
                 question.setName(teacher+"\n"+question.getName());
                 avaQuestions.add(question);

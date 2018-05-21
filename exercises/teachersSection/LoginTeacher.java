@@ -174,9 +174,9 @@ public class LoginTeacher extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
-            Pair<LinkedList<GeneralQuestion>, LinkedList<Quizz>> questionsNquizzes=TeacherLoader.load(jTextField2.getText(), jPasswordField1.getText());
+            Pair<Pair<LinkedList<GeneralQuestion>, LinkedList<GeneralQuestion>>, LinkedList<Quizz>> questionsNquizzes=TeacherLoader.load(jTextField2.getText(), jPasswordField1.getText(), _database);
             setVisible(false);
-            new TeacherGUI(jTextField2.getText(), jPasswordField1.getText(), questionsNquizzes.getFirst(), questionsNquizzes.getSecond()).setVisible(true);
+            new TeacherGUI(jTextField2.getText(), jPasswordField1.getText(), questionsNquizzes.getFirst().getFirst(), questionsNquizzes.getFirst().getSecond(), questionsNquizzes.getSecond()).setVisible(true);
             dispose();
         } catch (Exception ex) {
             new Message().setVisible(true);

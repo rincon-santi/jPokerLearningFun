@@ -53,6 +53,8 @@ public class EditQuestion extends javax.swing.JFrame {
     private boolean _disabled;
     private LinkedList<String> _labels;
     private Vector<String> _actualLabels;
+    private final boolean editing;
+    private final Question saved;
     
     /**
      * Creates new form EditQuestion
@@ -83,6 +85,8 @@ public class EditQuestion extends javax.swing.JFrame {
         Vector<String> aux3=new Vector<String>();
         initComponents();
         setTitle("Create Question");
+        editing=false;
+        saved=null;
         _actualLabels=new Vector<String>();
         _name="";
         _kind=kind;
@@ -153,6 +157,8 @@ public class EditQuestion extends javax.swing.JFrame {
         Vector<String> aux3=new Vector<String>();
         initComponents();
         setTitle("Create Question");
+        editing=true;
+        saved=q;
         _name=q.getName();
         _kind=kind;
         _father=father;
@@ -558,8 +564,20 @@ public class EditQuestion extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        _father.setVisible(true);
-        dispose();
+         if (editing){
+            switch(_kind){
+                case 1:
+                    ((TeacherGUI) _father).addQuestion(saved);
+                    dispose();
+                case 2:
+                    ((EditQuizz) _father).addQuestion(saved);
+                    dispose();
+            }
+        }
+        else{
+            _father.setVisible(true);
+            dispose();
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -584,7 +602,7 @@ public class EditQuestion extends javax.swing.JFrame {
                         }
                         else if (_kind==2){
                             EditQuizz featuredFather=(EditQuizz)_father;
-                            featuredFather.editedQuestion(q);
+                            featuredFather.addQuestion(q);
                         }
                         if (!_options.containsValue(new Double(10))) new Message("THERE ARE NO FULL PUNTUATION OPTIONS", "Warning").setVisible(true);
                         dispose();

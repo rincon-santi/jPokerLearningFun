@@ -25,6 +25,7 @@ import exercises.utils.Quizz;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Vector;
 import java.util.regex.Pattern;
@@ -162,17 +163,6 @@ public class EditQuizz extends javax.swing.JFrame {
             setVisible(true);
             jLabel4.setText(Integer.toString(_questions.size()*10));
         }
-    }
-    
-    public void editedQuestion(GeneralQuestion q){
-        Vector<String> aux=new Vector<String>();
-        _questions.add(q);
-        for (GeneralQuestion qu : _questions){
-            aux.add(qu.getName());
-        }
-        jList1.setListData(aux);
-        setVisible(true);
-        jLabel4.setText(Integer.toString(_questions.size()*10));
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -375,7 +365,7 @@ public class EditQuizz extends javax.swing.JFrame {
         else{
             _name=jTextField1.getText();
             Quizz q = new Quizz(_name, _questions);
-            _father.addQuizz(q, _questionsUsable);
+            _father.addQuizz(q);
             dispose();
         }
     }//GEN-LAST:event_jButton4ActionPerformed

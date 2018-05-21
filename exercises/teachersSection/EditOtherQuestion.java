@@ -52,6 +52,8 @@ public class EditOtherQuestion extends javax.swing.JFrame {
     private String _desc;
     private LinkedList<String> _labels;
     private Vector<String> _actualLabels;
+    private final boolean editing;
+    private final OtherQuestion saved;
     /**
      * Creates new form EditOtherQuestion
      */
@@ -80,6 +82,8 @@ public class EditOtherQuestion extends javax.swing.JFrame {
         Vector<String> aux3=new Vector<String>();
         initComponents();
         setTitle("Create Question");
+        saved=null;
+        editing=false;
         _actualLabels=new Vector<String>();
         _name="";
         _route="";
@@ -120,6 +124,8 @@ public class EditOtherQuestion extends javax.swing.JFrame {
         Vector<String> aux3=new Vector<String>();
         initComponents();
         setTitle("Create Question");
+        editing=true;
+        saved=q;
         _name=q.getName();
         _desc=q.getDescription();
         jTextArea1.setText(_desc);
@@ -400,8 +406,20 @@ public class EditOtherQuestion extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        _father.setVisible(true);
-        dispose();
+        if (editing){
+            switch(_kind){
+                case 1:
+                    ((TeacherGUI) _father).addQuestion(saved);
+                    dispose();
+                case 2:
+                    ((EditQuizz) _father).addQuestion(saved);
+                    dispose();
+            }
+        }
+        else{
+            _father.setVisible(true);
+            dispose();
+        }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed

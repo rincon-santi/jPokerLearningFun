@@ -20,6 +20,7 @@ package exercises.teachersSection;
 import exercises.studentsSection.*;
 import exercises.utils.Message;
 import exercises.utils.GeneralQuestion;
+import exercises.utils.Pair;
 import exercises.utils.Quizz;
 import exercises.utils.TeacherDatabaseSave;
 import java.awt.event.WindowAdapter;
@@ -172,8 +173,9 @@ public class CreateAccountTeacher extends javax.swing.JFrame {
                 TeacherSaver.save(jTextField2.getText(), jPasswordField1.getText(), new LinkedList<GeneralQuestion>(), new LinkedList<Quizz>());
                 _database.add(jTextField2.getText());
                 TeacherDatabaseSave.saveDatabase(_database);
+                Pair<Pair<LinkedList<GeneralQuestion>, LinkedList<GeneralQuestion>>, LinkedList<Quizz>> questionsNquizzes=TeacherLoader.load(jTextField2.getText(), jPasswordField1.getText(), _database);
                 setVisible(false);
-                new TeacherGUI(jTextField2.getText(), jPasswordField1.getText(), new LinkedList<GeneralQuestion>(), new LinkedList<Quizz>()).setVisible(true);
+                new TeacherGUI(jTextField2.getText(), jPasswordField1.getText(), questionsNquizzes.getFirst().getFirst(), questionsNquizzes.getFirst().getSecond(), questionsNquizzes.getSecond()).setVisible(true);
                 dispose();
             } catch (Exception ex) {
                 Logger.getLogger(LoginTeacher.class.getName()).log(Level.SEVERE, null, ex);

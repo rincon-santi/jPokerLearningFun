@@ -58,6 +58,7 @@ public class TeacherGUI extends javax.swing.JFrame {
     private String _key;
     private LinkedList<GeneralQuestion> _questions;
     private LinkedList<Quizz> _quizzes;
+    private LinkedList<GeneralQuestion> _otherTques;
     private HashMap<String, Integer> _guideQuestions;
     private HashMap<String, Integer> _guideQuizzes;
     
@@ -66,7 +67,7 @@ public class TeacherGUI extends javax.swing.JFrame {
     /**
      * Creates new form TeacherGUI
      */
-    public TeacherGUI(String name, String key, LinkedList<GeneralQuestion> questions, LinkedList<Quizz> quizzes) {
+    public TeacherGUI(String name, String key, LinkedList<GeneralQuestion> questions, LinkedList<GeneralQuestion> otherTquestions, LinkedList<Quizz> quizzes) {
         
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -89,6 +90,7 @@ public class TeacherGUI extends javax.swing.JFrame {
         jLabel4.setText(name);
         _name=name;
         _key=key;
+        actualizeOtherTeacherQuestions(otherTquestions);
         actualizeListQuestions(questions);
         actualizeListQuizzes(quizzes);
         addWindowListener(new closer(this));
@@ -103,6 +105,13 @@ public class TeacherGUI extends javax.swing.JFrame {
         public void windowClosing(WindowEvent e) {
             new ExitConfirmation(_fa).setVisible(true);
         }
+    }
+    
+    private void actualizeOtherTeacherQuestions(LinkedList<GeneralQuestion> questions){
+        Vector<String> es=new Vector<String>();
+        _otherTques=questions;
+        for (GeneralQuestion q : questions) es.add(q.getName());
+        jList3.setListData(es);      
     }
     
     
@@ -212,6 +221,10 @@ public class TeacherGUI extends javax.swing.JFrame {
         jButton8 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton12 = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jList3 = new javax.swing.JList<>();
+        jButton13 = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setLocationByPlatform(true);
@@ -335,30 +348,56 @@ public class TeacherGUI extends javax.swing.JFrame {
             }
         });
 
+        jList3.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane3.setViewportView(jList3);
+
+        jButton13.setBackground(new java.awt.Color(234, 170, 56));
+        jButton13.setText("Preview");
+        jButton13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton13ActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("Other Teachers Questions");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(72, 72, 72)
-                                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(37, 37, 37))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(37, 37, 37)
+                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addGap(228, 228, 228)
+                                    .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -403,32 +442,37 @@ public class TeacherGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel4)
-                                .addGap(51, 51, 51)
-                                .addComponent(jButton4)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton5)
-                                .addGap(43, 43, 43)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jButton2)
-                            .addComponent(jButton6)
-                            .addComponent(jButton3)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton11)
-                            .addComponent(jButton10)
-                            .addComponent(jButton9)
-                            .addComponent(jButton12))))
+                        .addGap(110, 110, 110)
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel4)
+                        .addGap(51, 51, 51)
+                        .addComponent(jButton4)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton5))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jButton1)
+                                .addComponent(jButton2)
+                                .addComponent(jButton6)
+                                .addComponent(jButton3))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jButton13))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jButton11)
+                                .addComponent(jButton10)
+                                .addComponent(jButton9)
+                                .addComponent(jButton12)))))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
@@ -479,7 +523,10 @@ public class TeacherGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        new EditQuizz(_questions,this).setVisible(true);
+        LinkedList<GeneralQuestion> aux=new LinkedList<GeneralQuestion>();
+        aux.addAll(_questions);
+        aux.addAll(_otherTques);
+        new EditQuizz(aux,this).setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_jButton9ActionPerformed
 
@@ -490,7 +537,10 @@ public class TeacherGUI extends javax.swing.JFrame {
         else{
             Quizz q= _quizzes.get(index);
             _quizzes.remove(q);
-            new EditQuizz(q, _questions, this).setVisible(true);
+            LinkedList<GeneralQuestion> aux=new LinkedList();
+            aux.addAll(_questions);
+            aux.addAll(_otherTques);
+            new EditQuizz(q, aux, this).setVisible(true);
             setVisible(false);
         }
     }//GEN-LAST:event_jButton10ActionPerformed
@@ -561,12 +611,32 @@ public class TeacherGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton12ActionPerformed
 
+    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+        int index=jList3.getMinSelectionIndex();
+        if (index==-1) new Message("NO QUESTIONS SELECTED").setVisible(true);
+        else if (index!=jList3.getMaxSelectionIndex()) new Message("PLEASE SELECT ONLY ONE QUESTION").setVisible(true);
+        else{
+            GeneralQuestion q= _otherTques.get(index);
+            switch (q.getKind()){
+                case 1:
+                    new Quizzing((Question)q, this,3).setVisible(true);
+                    setVisible(false);
+                    break;
+                case 2:
+                    new OtherQuizzing((OtherQuestion)q, this, 3).setVisible(true);
+                    setVisible(false);
+                    break;
+            }
+        }
+    }//GEN-LAST:event_jButton13ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
+    private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -579,23 +649,38 @@ public class TeacherGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JList<String> jList1;
     private javax.swing.JList<String> jList2;
+    private javax.swing.JList<String> jList3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     // End of variables declaration//GEN-END:variables
 
-    public void addQuizz(Quizz q, LinkedList<GeneralQuestion> questionsUsable) {
+    public void addQuizz(Quizz q) {
         Vector<String> aux=new Vector<String>();
         for (Quizz qu : _quizzes) aux.add(qu.getName());
-        if (aux.contains(q.getName())) new Message("NAME ALREADY IN USE, TRY AGAIN").setVisible(true);
-        else{
-            _questions=questionsUsable;
-            _quizzes.add(q);
-            actualizeListQuestions(_questions);
-            actualizeListQuizzes(_quizzes);
-            setVisible(true);
+        if (aux.contains(q.getName())) {
+            String [] opts ={
+                "Rename",
+                "Overwrite"
+            };
+            Icon icon= new ImageIcon(ImageManager.INSTANCE.getImage(ImageManager.IMAGES_PATH+"poker-chip.png")); 
+            String selectOpt= (String) JOptionPane.showInputDialog(null, "Name already in use", "WARNING", JOptionPane.DEFAULT_OPTION, icon, opts, opts[0]);
+            switch (selectOpt){
+                case "Rename":
+                    q.setName((String) JOptionPane.showInputDialog(null, "Introduce New Name", "Rename", JOptionPane.DEFAULT_OPTION));
+                    break;
+                case "Overwrite":
+                    for (GeneralQuestion que : _questions) if (que.getName().equals(q.getName())) _questions.remove(que);
+                    aux.remove(q.getName());
+                    break;
+            }
         }
+        _quizzes.add(q);
+        actualizeListQuizzes(_quizzes);
+        setVisible(true);
     }
 
     public static void moveImage(String imgRoute, String string) {
