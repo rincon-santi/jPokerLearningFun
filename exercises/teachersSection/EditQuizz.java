@@ -42,6 +42,8 @@ public class EditQuizz extends javax.swing.JFrame {
     private final TeacherGUI _father;
     private LinkedList<GeneralQuestion> _questions;
     private String _name;
+    private final boolean editing;
+    private final Quizz saved;
     
     private static final String pattern = Pattern.quote(System.getProperty("file.separator"));
     /**
@@ -65,6 +67,8 @@ public class EditQuizz extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(EditOtherQuestion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         Vector<String> aux=new Vector<String>();
+        editing=false;
+        saved=null;
         _questionsUsable=questions;
         _father=father;
         setTitle("Create Exam");
@@ -95,6 +99,8 @@ public class EditQuizz extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(EditOtherQuestion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         Vector<String> aux=new Vector<String>();
+        editing=true;
+        saved=qu;
         _questionsUsable=questions;
         _father=father;
         setTitle("Create Quizz");
@@ -355,7 +361,8 @@ public class EditQuizz extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        _father.setVisible(true);
+        if(editing) _father.addQuizz(saved);
+        else _father.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 

@@ -24,6 +24,7 @@ import com.jcraft.jsch.SftpException;
 import exercises.studentsSection.OtherQuizzing;
 import exercises.studentsSection.QuizzController;
 import exercises.studentsSection.Quizzing;
+import exercises.utils.Card;
 import exercises.utils.SSHConnector;
 import exercises.utils.GeneralQuestion;
 import exercises.utils.OtherQuestion;
@@ -58,7 +59,7 @@ public class TeacherGUI extends javax.swing.JFrame {
     private String _key;
     private LinkedList<GeneralQuestion> _questions;
     private LinkedList<Quizz> _quizzes;
-    private LinkedList<GeneralQuestion> _otherTques;
+    private final LinkedList<GeneralQuestion> _otherTques;
     private HashMap<String, Integer> _guideQuestions;
     private HashMap<String, Integer> _guideQuizzes;
     
@@ -90,7 +91,10 @@ public class TeacherGUI extends javax.swing.JFrame {
         jLabel4.setText(name);
         _name=name;
         _key=key;
-        actualizeOtherTeacherQuestions(otherTquestions);
+        _otherTques=otherTquestions;
+        Vector<String> es=new Vector<String>();
+        for (GeneralQuestion q : _otherTques) es.add(q.getName());
+        jList3.setListData(es);
         actualizeListQuestions(questions);
         actualizeListQuizzes(quizzes);
         addWindowListener(new closer(this));
@@ -105,13 +109,6 @@ public class TeacherGUI extends javax.swing.JFrame {
         public void windowClosing(WindowEvent e) {
             new ExitConfirmation(_fa).setVisible(true);
         }
-    }
-    
-    private void actualizeOtherTeacherQuestions(LinkedList<GeneralQuestion> questions){
-        Vector<String> es=new Vector<String>();
-        _otherTques=questions;
-        for (GeneralQuestion q : questions) es.add(q.getName());
-        jList3.setListData(es);      
     }
     
     
@@ -524,8 +521,46 @@ public class TeacherGUI extends javax.swing.JFrame {
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         LinkedList<GeneralQuestion> aux=new LinkedList<GeneralQuestion>();
-        aux.addAll(_questions);
-        aux.addAll(_otherTques);
+        for (GeneralQuestion q : _questions){
+            if (q.getKind()==1) {
+                HashMap<String, Double> auxOpt=new HashMap();
+                for (String opt : q.getOpts().keySet()) auxOpt.put(opt, q.getOpts().get(opt));
+                Vector<String> auxLab=new Vector();
+                for(String la : q.getLabels()) auxLab.add(la);
+                LinkedList<Card> auxComCards=new LinkedList();
+                LinkedList<Card> auxMyCards=new LinkedList();
+                for (Card c : ((Question)q).getCommmunityCards()) auxComCards.add(c);
+                for (Card ca : ((Question)q).getMyCards()) auxMyCards.add(ca);
+                aux.add(new Question(q.getName(), auxOpt, auxComCards, auxMyCards,q.getDescription(),auxLab));
+            }
+            else if (q.getKind()==2) {
+                HashMap<String, Double> auxOpt=new HashMap();
+                for (String opt : q.getOpts().keySet()) auxOpt.put(opt, q.getOpts().get(opt));
+                Vector<String> auxLab=new Vector();
+                for(String la : q.getLabels()) auxLab.add(la);
+                aux.add(new OtherQuestion(q.getName(), auxOpt, ((OtherQuestion)q).getImgRoute(), q.getDescription(), auxLab));
+            }
+        }
+        for (GeneralQuestion q : _otherTques){
+            if (q.getKind()==1) {
+                HashMap<String, Double> auxOpt=new HashMap();
+                for (String opt : q.getOpts().keySet()) auxOpt.put(opt, q.getOpts().get(opt));
+                Vector<String> auxLab=new Vector();
+                for(String la : q.getLabels()) auxLab.add(la);
+                LinkedList<Card> auxComCards=new LinkedList();
+                LinkedList<Card> auxMyCards=new LinkedList();
+                for (Card c : ((Question)q).getCommmunityCards()) auxComCards.add(c);
+                for (Card ca : ((Question)q).getMyCards()) auxMyCards.add(ca);
+                aux.add(new Question(q.getName(), auxOpt, auxComCards, auxMyCards,q.getDescription(),auxLab));
+            }
+            else if (q.getKind()==2) {
+                HashMap<String, Double> auxOpt=new HashMap();
+                for (String opt : q.getOpts().keySet()) auxOpt.put(opt, q.getOpts().get(opt));
+                Vector<String> auxLab=new Vector();
+                for(String la : q.getLabels()) auxLab.add(la);
+                aux.add(new OtherQuestion(q.getName(), auxOpt, ((OtherQuestion)q).getImgRoute(), q.getDescription(), auxLab));
+            }
+        }
         new EditQuizz(aux,this).setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_jButton9ActionPerformed
@@ -535,12 +570,50 @@ public class TeacherGUI extends javax.swing.JFrame {
         if (index==-1) new Message("NO EXAMS SELECTED").setVisible(true);
         else if (index!=jList2.getMaxSelectionIndex()) new Message("PLEASE SELECT ONLY ONE EXAM").setVisible(true);
         else{
-            Quizz q= _quizzes.get(index);
-            _quizzes.remove(q);
+            Quizz qu= _quizzes.get(index);
+            _quizzes.remove(qu);
             LinkedList<GeneralQuestion> aux=new LinkedList();
-            aux.addAll(_questions);
-            aux.addAll(_otherTques);
-            new EditQuizz(q, aux, this).setVisible(true);
+            for (GeneralQuestion q : _questions){
+                if (q.getKind()==1) {
+                    HashMap<String, Double> auxOpt=new HashMap();
+                    for (String opt : q.getOpts().keySet()) auxOpt.put(opt, q.getOpts().get(opt));
+                    Vector<String> auxLab=new Vector();
+                    for(String la : q.getLabels()) auxLab.add(la);
+                    LinkedList<Card> auxComCards=new LinkedList();
+                    LinkedList<Card> auxMyCards=new LinkedList();
+                    for (Card c : ((Question)q).getCommmunityCards()) auxComCards.add(c);
+                    for (Card ca : ((Question)q).getMyCards()) auxMyCards.add(ca);
+                    aux.add(new Question(q.getName(), auxOpt, auxComCards, auxMyCards,q.getDescription(),auxLab));
+                }
+                else if (q.getKind()==2) {
+                    HashMap<String, Double> auxOpt=new HashMap();
+                    for (String opt : q.getOpts().keySet()) auxOpt.put(opt, q.getOpts().get(opt));
+                    Vector<String> auxLab=new Vector();
+                    for(String la : q.getLabels()) auxLab.add(la);
+                    aux.add(new OtherQuestion(q.getName(), auxOpt, ((OtherQuestion)q).getImgRoute(), q.getDescription(), auxLab));
+                }
+            }
+            for (GeneralQuestion q : _otherTques){
+                if (q.getKind()==1) {
+                    HashMap<String, Double> auxOpt=new HashMap();
+                    for (String opt : q.getOpts().keySet()) auxOpt.put(opt, q.getOpts().get(opt));
+                    Vector<String> auxLab=new Vector();
+                    for(String la : q.getLabels()) auxLab.add(la);
+                    LinkedList<Card> auxComCards=new LinkedList();
+                    LinkedList<Card> auxMyCards=new LinkedList();
+                    for (Card c : ((Question)q).getCommmunityCards()) auxComCards.add(c);
+                    for (Card ca : ((Question)q).getMyCards()) auxMyCards.add(ca);
+                    aux.add(new Question(q.getName(), auxOpt, auxComCards, auxMyCards,q.getDescription(),auxLab));
+                }
+                else if (q.getKind()==2) {
+                    HashMap<String, Double> auxOpt=new HashMap();
+                    for (String opt : q.getOpts().keySet()) auxOpt.put(opt, q.getOpts().get(opt));
+                    Vector<String> auxLab=new Vector();
+                    for(String la : q.getLabels()) auxLab.add(la);
+                    aux.add(new OtherQuestion(q.getName(), auxOpt, ((OtherQuestion)q).getImgRoute(), q.getDescription(), auxLab));
+                }
+            }
+            new EditQuizz(qu, aux, this).setVisible(true);
             setVisible(false);
         }
     }//GEN-LAST:event_jButton10ActionPerformed

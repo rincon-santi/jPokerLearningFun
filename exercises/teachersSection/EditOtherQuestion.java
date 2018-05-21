@@ -398,8 +398,9 @@ public class EditOtherQuestion extends javax.swing.JFrame {
                 toRem.add((String)_options.keySet().toArray()[i]);
             }
             for (String rem : toRem) _options.remove(rem);
-            for (String opt : _options.keySet()){
-                aux3.add(opt);
+            for (String opti : _options.keySet()){
+                String auxOpt=opti+": "+_options.get(opti).toString();
+                aux3.add(auxOpt);
             }
             jList1.setListData(aux3);
         }
